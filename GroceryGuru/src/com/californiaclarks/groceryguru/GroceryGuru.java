@@ -77,14 +77,14 @@ public class GroceryGuru extends FragmentActivity {
 			break;
 		case R.id.refresh:
 			// refresh frige
-			refresh();
+			refreshFrige();
 			break;
 		}
 
 		return false;
 	}
 
-	public boolean refresh() {
+	public boolean refreshFrige() {
 
 		// refresh data in database from online
 		userFunctions = new UserFunctions(this);
@@ -109,13 +109,17 @@ public class GroceryGuru extends FragmentActivity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		r.setRecipe(userFunctions.requestRecipe());
-		// refresh items in frige fragment and shoping list fragment
+		
 		f.setItems(userFunctions.getFrige(getApplicationContext()));
 		s.setItems(userFunctions.getFrige(getApplicationContext()));
 
 		return notEmpty;
+	}
+	
+	public boolean refreshRecipe() {
+		userFunctions = new UserFunctions(this);
+		r.setRecipe(userFunctions.requestRecipe());
+		return true;
 	}
 
 	// PageAdapter

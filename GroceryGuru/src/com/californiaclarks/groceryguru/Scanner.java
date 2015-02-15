@@ -150,7 +150,7 @@ public class Scanner extends Fragment implements OnClickListener {
 												value,
 												expDate);
 							}// refresh local DBs
-							((GroceryGuru) getActivity()).refresh();
+							((GroceryGuru) getActivity()).refreshFrige();
 						}
 					});
 			alertExp.setNegativeButton("Cancel",
@@ -207,7 +207,7 @@ public class Scanner extends Fragment implements OnClickListener {
 		switch (requestCode) {
 		case REQUEST_SELECT:
 			// refresh after selection of new items
-			((GroceryGuru) getActivity()).refresh();
+			((GroceryGuru) getActivity()).refreshFrige();
 			break;
 		case REQUEST_CAMERA:
 			// show scanning progress bar and start tesseract

@@ -98,7 +98,7 @@ public class Frige2 extends ListFragment {
 				((GroceryGuru) getActivity()).userFunctions
 						.delFromFrige(clickedItem);
 				// refresh local DBs
-				((GroceryGuru) getActivity()).refresh();
+				((GroceryGuru) getActivity()).refreshFrige();
 				delete.setClickable(false);
 				delete.setText("Remove");
 			}
