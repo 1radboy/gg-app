@@ -59,6 +59,10 @@
             android:name=".Welcome"
             android:label="@string/title_activity_welcome" >
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
     </application>
 
 </manifest>

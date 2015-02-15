@@ -6,6 +6,7 @@
     <string name="camera_title">Add Items</string>
     <string name="frige_title">Fridge</string>
     <string name="shoplist_title">Shopping List</string>
+    <string name="recipe_title">Recipe Reccomendation</string>
     <string name="bTakePic">\nScan Your Recipt\n</string>
     <string name="bAddByHand">Add Item Manually</string>
     <string name="bSubmit">Add To Frige</string>
@@ -15,5 +16,6 @@
     <string name="title_activity_welcome">Grocery Guru</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_recipie">Recipie</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>

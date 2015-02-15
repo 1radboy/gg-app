@@ -28,6 +28,7 @@ public class GroceryGuru extends FragmentActivity {
 	// Fragments
 	Frige2 f = new Frige2();
 	ShopList s = new ShopList();
+	Recipe r = new Recipe();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,10 +108,12 @@ public class GroceryGuru extends FragmentActivity {
 			e.printStackTrace();
 		}
 
+		r.setRecipe(userFunctions.requestRecipe(userFunctions
+				.getUserData(getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]));
 		// refresh items in frige fragment and shoping list fragment
 		f.setItems(userFunctions.getFrige(getApplicationContext()));
 		s.setItems(userFunctions.getFrige(getApplicationContext()));
-		
+
 		return notEmpty;
 	}
 
@@ -133,6 +136,8 @@ public class GroceryGuru extends FragmentActivity {
 			} else if (pos == 2) {
 				s.setItems(userFunctions.getFrige(getApplicationContext()));
 				return s;
+			} else if (pos == 3) {				
+				return r;
 			}
 			return null;
 		}
@@ -140,7 +145,7 @@ public class GroceryGuru extends FragmentActivity {
 		// return fragment count
 		@Override
 		public int getCount() {
-			return 3;
+			return 4;
 		}
 
 		// return fragment titles
@@ -154,6 +159,8 @@ public class GroceryGuru extends FragmentActivity {
 				return getString(R.string.frige_title).toUpperCase(l);
 			case 2:
 				return getString(R.string.shoplist_title).toUpperCase(l);
+			case 3:
+				return getString(R.string.recipe_title).toUpperCase(l);
 			}
 			return null;
 		}
