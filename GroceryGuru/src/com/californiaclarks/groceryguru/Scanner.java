@@ -122,23 +122,32 @@ public class Scanner extends Fragment implements OnClickListener {
 			alertExp.setMessage("Enter the number of days from now the item will expire.");
 			final EditText inputExp = new EditText(getActivity());
 			inputExp.setInputType(InputType.TYPE_CLASS_NUMBER);
+			inputExp.setHint("Leave blank for default");
 			alertExp.setView(inputExp);
 			alertExp.setPositiveButton("Add",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
-							int expDate = Integer.parseInt(inputExp.getText()
-									.toString());
 							userFunctions = new UserFunctions();
-							// add item to online GroceryGuru account
-							userFunctions
-									.addToFrigeExpire(
-											value,
-											expDate,
-											userFunctions
-													.getUserData(getActivity()
-															.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
-							// refresh local DBs
+							if (inputExp.getText().toString().equals("")) {
+								userFunctions.addToFrige(
+										value,
+										userFunctions.getUserData(getActivity()
+												.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
+							} else {
+
+								int expDate = Integer.parseInt(inputExp
+										.getText().toString());
+								// add item to online GroceryGuru account
+
+								userFunctions
+										.addToFrigeExpire(
+												value,
+												expDate,
+												userFunctions
+														.getUserData(getActivity()
+																.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
+							}// refresh local DBs
 							((GroceryGuru) getActivity()).refresh();
 						}
 					});
