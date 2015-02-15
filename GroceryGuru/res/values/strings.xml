@@ -4,13 +4,13 @@
     <string name="app_name">Grocery Guru</string>
     <string name="action_settings">Settings</string>
     <string name="camera_title">Add Items</string>
-    <string name="frige_title">Frige</string>
+    <string name="frige_title">Fridge</string>
     <string name="shoplist_title">Shopping List</string>
     <string name="bTakePic">\nScan Your Recipt\n</string>
     <string name="bAddByHand">Add Item Manually</string>
     <string name="bSubmit">Add To Frige</string>
     <string name="logout">Logout</string>
-    <string name="refresh">Refresh Frige</string>
+    <string name="refresh">Refresh Fridge</string>
     <string name="tip1">Tip! Only scan the items on the left!</string>
     <string name="title_activity_welcome">Grocery Guru</string>
     <string name="hello_world">Hello world!</string>
