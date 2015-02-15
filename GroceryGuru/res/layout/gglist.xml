@@ -4,9 +4,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@android:id/list"
+    <LinearLayout
+        android:id="@+id/listLayoutShop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#EEEEEE" />
-</LinearLayout>
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#EEEEEE" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/appleShop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="100"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:src="@drawable/apple"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/emptyTextShop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:text="Your shopping list is empty!"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:visibility="gone" />
+
+</LinearLayout>

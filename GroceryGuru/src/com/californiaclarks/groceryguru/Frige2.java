@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -83,7 +84,7 @@ public class Frige2 extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// super.onCreateView(inflater, container, savedInstanceState);
+		super.onCreateView(inflater, container, savedInstanceState);
 
 		// set layout to custom list
 		// use and set custom list adapter
@@ -97,29 +98,31 @@ public class Frige2 extends ListFragment {
 			empty = false;
 		}
 		adapter.notifyDataSetChanged();
-		View vFrag;
+		final View vFrag = inflater.inflate(R.layout.gglistfridge, container,
+				false);
+		delete = (Button) vFrag.findViewById(R.id.delete);
+		delete.setClickable(false);
+		delete.setTextColor(Color.GRAY);
+		delete.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String email = userFunctions.getUserData(getActivity()
+						.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0];
+				userFunctions.delFromFrige(currentItem, email);
+				// refresh local DBs
+				((GroceryGuru) getActivity()).refresh();
+				delete.setClickable(false);
+				delete.setTextColor(Color.GRAY);
+				delete.setText("Remove");
+			}
+		});
 		if (empty) {
-			vFrag = inflater.inflate(R.layout.fridgeempty, container, false);
-		} else {
-			vFrag = inflater.inflate(R.layout.gglistfridge, container, false);
-			delete = (Button) vFrag.findViewById(R.id.delete);
-			delete.setClickable(false);
-			delete.setTextColor(Color.GRAY);
-			delete.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					String email = userFunctions.getUserData(getActivity()
-							.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0];
-					userFunctions.delFromFrige(currentItem, email);
-					// refresh local DBs
-					((GroceryGuru) getActivity()).refresh();
-					delete.setClickable(false);
-					delete.setTextColor(Color.GRAY);
-					delete.setText("Remove");
-				}
-			});
-
+			vFrag.findViewById(R.id.appleFridge).setVisibility(View.VISIBLE);
+			vFrag.findViewById(R.id.emptyTextFridge)
+					.setVisibility(View.VISIBLE);
+			vFrag.findViewById(R.id.delete).setVisibility(View.GONE);
+			vFrag.findViewById(R.id.listLayoutFridge).setVisibility(View.GONE);
 		}
 		return vFrag;
 	}

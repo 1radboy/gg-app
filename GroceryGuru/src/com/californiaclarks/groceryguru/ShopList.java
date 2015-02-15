@@ -117,11 +117,11 @@ public class ShopList extends ListFragment {
 		}
 		adapter.notifyDataSetChanged();
 		// set layout to custom gglist layout
-		View vFrag;
+		View vFrag = inflater.inflate(R.layout.gglist, container, false);
 		if (empty) {
-			vFrag = inflater.inflate(R.layout.shoppingempty, container, false);
-		} else {
-			vFrag = inflater.inflate(R.layout.gglist, container, false);
+			vFrag.findViewById(R.id.appleShop).setVisibility(View.VISIBLE);
+			vFrag.findViewById(R.id.emptyTextShop).setVisibility(View.VISIBLE);
+			vFrag.findViewById(R.id.listLayoutShop).setVisibility(View.GONE);
 		}
 
 		// use and set the custom adapter

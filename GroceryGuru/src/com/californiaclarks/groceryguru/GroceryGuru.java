@@ -14,18 +14,19 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.californiaclarks.groceryguru.library.DatabaseHandler;
 import com.californiaclarks.groceryguru.library.UserFunctions;
 
 public class GroceryGuru extends FragmentActivity {
 
-	//member variables
+	// member variables
 	GGPagerAdapter paMain;
 	ViewPager vpMain;
 	UserFunctions userFunctions;
 
-	//Fragments
+	// Fragments
 	Frige2 f = new Frige2();
 	ShopList s = new ShopList();
 
@@ -63,7 +64,7 @@ public class GroceryGuru extends FragmentActivity {
 
 		switch (menuitem.getItemId()) {
 		case R.id.logout:
-			//logout user and close main activity
+			// logout user and close main activity
 			userFunctions = new UserFunctions();
 			userFunctions.logoutUser(getApplicationContext());
 			Intent login = new Intent(getApplicationContext(), Login.class);
@@ -72,7 +73,7 @@ public class GroceryGuru extends FragmentActivity {
 			finish();
 			break;
 		case R.id.refresh:
-			//refresh frige
+			// refresh frige
 			refresh();
 			break;
 		}
@@ -80,46 +81,76 @@ public class GroceryGuru extends FragmentActivity {
 		return false;
 	}
 
-	public void refresh() {
-		
-		//refresh data in database from online
+	public boolean refresh() {
+
+		// refresh data in database from online
 		userFunctions = new UserFunctions();
 		JSONObject json = userFunctions
 				.refreshFrige(userFunctions
 						.getUserData(getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
 
-		//pull new data from the DB
+		// pull new data from the DB
+		boolean notEmpty = false;
 		try {
-			DatabaseHandler db = new DatabaseHandler(
-					getApplicationContext());
+			DatabaseHandler db = new DatabaseHandler(getApplicationContext());
 
 			db.reset(DatabaseHandler.TABLE_FRIGE);
 			JSONObject frige = json.getJSONObject("items");
 			int j = 0;
 			while (j < frige.length()) {
+				notEmpty = true;
 				String item = frige.names().getString(j);
-				db.addItem(item, frige.getJSONArray(item).getString(0),
-						frige.getJSONArray(item).getString(1));
+				db.addItem(item, frige.getJSONArray(item).getString(0), frige
+						.getJSONArray(item).getString(1));
 				j++;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		//refresh items in frige fragment and shoping list fragment
+		// refresh items in frige fragment and shoping list fragment
 		f.setItems(userFunctions.getFrige(getApplicationContext()));
 		s.setItems(userFunctions.getFrige(getApplicationContext()));
+		try {
+
+			if (notEmpty) {
+				findViewById(R.id.appleFridge).setVisibility(View.GONE);
+				findViewById(R.id.emptyTextFridge).setVisibility(View.GONE);
+				findViewById(R.id.delete).setVisibility(View.VISIBLE);
+				findViewById(R.id.listLayoutFridge).setVisibility(View.VISIBLE);
+			} else {
+				findViewById(R.id.appleFridge).setVisibility(View.VISIBLE);
+				findViewById(R.id.emptyTextFridge).setVisibility(View.VISIBLE);
+				findViewById(R.id.delete).setVisibility(View.GONE);
+				findViewById(R.id.listLayoutFridge).setVisibility(View.GONE);
+			}
+		} catch (Exception e) {
+		}
+		try {
+
+			if (notEmpty) {
+				findViewById(R.id.appleShop).setVisibility(View.GONE);
+				findViewById(R.id.emptyTextShop).setVisibility(View.GONE);
+				findViewById(R.id.listLayoutShop).setVisibility(View.VISIBLE);
+			} else {
+				findViewById(R.id.appleShop).setVisibility(View.VISIBLE);
+				findViewById(R.id.emptyTextShop).setVisibility(View.VISIBLE);
+				findViewById(R.id.listLayoutShop).setVisibility(View.GONE);
+			}
+		} catch (Exception e) {
+		}
+		return notEmpty;
 	}
-	
-	//PageAdapter
+
+	// PageAdapter
 	public class GGPagerAdapter extends FragmentPagerAdapter {
 
-		//constructor
+		// constructor
 		public GGPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
-		//return each fragment
+		// return each fragment
 		@Override
 		public Fragment getItem(int pos) {
 			if (pos == 0)
@@ -134,13 +165,13 @@ public class GroceryGuru extends FragmentActivity {
 			return null;
 		}
 
-		//return fragment count
+		// return fragment count
 		@Override
 		public int getCount() {
 			return 3;
 		}
 
-		//return fragment titles
+		// return fragment titles
 		@Override
 		public CharSequence getPageTitle(int pos) {
 			Locale l = Locale.getDefault();
