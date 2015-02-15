@@ -14,14 +14,20 @@ public class UserFunctions {
 	//member variables
 	JSONParser jsonParser;
 	String url = "http://californiaclarks.com/sites/gg/";
+	String email;
 
 	//constructor
+	public UserFunctions(Context c) {
+		jsonParser = new JSONParser();
+		this.email = getUserData(c)[DatabaseHandler.LOC_EMAIL][0];
+	}
 	public UserFunctions() {
 		jsonParser = new JSONParser();
 	}
 
 	//login and return server response
 	public JSONObject loginUser(String email, String password) {
+		this.email = email;
 		List<NameValuePair> tags = new ArrayList<NameValuePair>();
 		tags.add(new BasicNameValuePair("tag", "login"));
 		tags.add(new BasicNameValuePair("email", email));
@@ -32,6 +38,7 @@ public class UserFunctions {
 
 	//register and return server response
 	public JSONObject registerUser(String name, String email, String password) {
+		this.email = email;
 		List<NameValuePair> tags = new ArrayList<NameValuePair>();
 		tags.add(new BasicNameValuePair("tag", "register"));
 		tags.add(new BasicNameValuePair("name", name));
@@ -75,7 +82,7 @@ public class UserFunctions {
 	}
 
 	//get frige from online and return server response
-	public JSONObject refreshFrige(String email) {
+	public JSONObject refreshFrige() {
 		List<NameValuePair> tags = new ArrayList<NameValuePair>();
 		tags.add(new BasicNameValuePair("tag", "refreshFrige"));
 		tags.add(new BasicNameValuePair("email", email));
@@ -84,7 +91,7 @@ public class UserFunctions {
 	}
 	
 	//add a single item to the frige online and return server response
-	public JSONObject addToFrige(String item, String email) {
+	public JSONObject addToFrige(String item) {
 		List<NameValuePair> tags = new ArrayList<NameValuePair>();
 		tags.add(new BasicNameValuePair("tag", "addToFrige"));
 		tags.add(new BasicNameValuePair("item", item));
@@ -94,7 +101,7 @@ public class UserFunctions {
 	}
 	
 	//manually add a single item to the frige online and return server response
-	public JSONObject addToFrigeExpire(String item, int userProvidedExpire, String email) {
+	public JSONObject addToFrigeExpire(String item, int userProvidedExpire) {
 		List<NameValuePair> tags = new ArrayList<NameValuePair>();
 		tags.add(new BasicNameValuePair("tag", "addToFrige"));
 		tags.add(new BasicNameValuePair("item", item));
@@ -105,7 +112,7 @@ public class UserFunctions {
 	}
 	
 	//delete a single item from the frige online and return server response
-	public JSONObject delFromFrige(String item, String email) {
+	public JSONObject delFromFrige(String item) {
 		List<NameValuePair> tags = new ArrayList<NameValuePair>();
 		tags.add(new BasicNameValuePair("tag", "delFromFrige"));
 		tags.add(new BasicNameValuePair("item", item));
@@ -124,7 +131,7 @@ public class UserFunctions {
 	}
 	
 	// request a recipie from the server
-	public JSONObject requestRecipe(String email) {
+	public JSONObject requestRecipe() {
 		List<NameValuePair> tags = new ArrayList<NameValuePair>();
 		tags.add(new BasicNameValuePair("tag", "requestRecipe"));
 		tags.add(new BasicNameValuePair("email", email));

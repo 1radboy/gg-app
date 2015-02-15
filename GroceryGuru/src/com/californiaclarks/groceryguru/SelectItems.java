@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.californiaclarks.groceryguru.library.DatabaseHandler;
 import com.californiaclarks.groceryguru.library.UserFunctions;
 
 public class SelectItems extends Activity implements OnClickListener {
@@ -20,7 +19,7 @@ public class SelectItems extends Activity implements OnClickListener {
 	Button bSubmit;
 	ListView list;
 	ArrayAdapter<String> adapter;
-	UserFunctions userFunctions = new UserFunctions();
+	UserFunctions userFunctions = new UserFunctions(getApplicationContext());
 
 	//create selectable view
 	@Override
@@ -50,8 +49,7 @@ public class SelectItems extends Activity implements OnClickListener {
 			int pos = checked.keyAt(i);
 			userFunctions
 					.addToFrige(
-							adapter.getItem(pos),
-							userFunctions.getUserData(getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
+							adapter.getItem(pos));
 		}
 		Toast.makeText(getApplicationContext(), "Added items to your frige!", Toast.LENGTH_SHORT).show();
 		//will cause refresh on local frige and DBs

@@ -26,15 +26,18 @@ public class GroceryGuru extends FragmentActivity {
 	UserFunctions userFunctions;
 
 	// Fragments
-	Frige2 f = new Frige2();
-	ShopList s = new ShopList();
-	Recipe r = new Recipe();
+	Frige2 f;
+	ShopList s;
+	Recipe r;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		userFunctions = new UserFunctions();
+		userFunctions = new UserFunctions(this);
+		f = new Frige2();
+		s = new ShopList();
+		r = new Recipe();
 
 		if (userFunctions.isLoggedIn(getApplicationContext())) {
 			setContentView(R.layout.groceryguru);
@@ -65,7 +68,7 @@ public class GroceryGuru extends FragmentActivity {
 		switch (menuitem.getItemId()) {
 		case R.id.logout:
 			// logout user and close main activity
-			userFunctions = new UserFunctions();
+			userFunctions = new UserFunctions(this);
 			userFunctions.logoutUser(getApplicationContext());
 			Intent login = new Intent(getApplicationContext(), Login.class);
 			login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -84,10 +87,9 @@ public class GroceryGuru extends FragmentActivity {
 	public boolean refresh() {
 
 		// refresh data in database from online
-		userFunctions = new UserFunctions();
+		userFunctions = new UserFunctions(this);
 		JSONObject json = userFunctions
-				.refreshFrige(userFunctions
-						.getUserData(getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
+				.refreshFrige();
 
 		// pull new data from the DB
 		boolean notEmpty = false;
@@ -108,8 +110,7 @@ public class GroceryGuru extends FragmentActivity {
 			e.printStackTrace();
 		}
 
-		r.setRecipe(userFunctions.requestRecipe(userFunctions
-				.getUserData(getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]));
+		r.setRecipe(userFunctions.requestRecipe());
 		// refresh items in frige fragment and shoping list fragment
 		f.setItems(userFunctions.getFrige(getApplicationContext()));
 		s.setItems(userFunctions.getFrige(getApplicationContext()));
@@ -129,7 +130,7 @@ public class GroceryGuru extends FragmentActivity {
 		@Override
 		public Fragment getItem(int pos) {
 			if (pos == 0)
-				return new Scanner();
+				return new Scanner(getApplicationContext());
 			else if (pos == 1) {
 				f.setItems(userFunctions.getFrige(getApplicationContext()));
 				return f;

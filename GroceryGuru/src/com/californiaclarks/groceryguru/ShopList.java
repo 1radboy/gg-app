@@ -52,7 +52,6 @@ public class ShopList extends ListFragment {
 
 	// member variables
 	String[][] items;
-	UserFunctions userFunctions;
 	GGAdapter adapter = null;
 	Context context;
 

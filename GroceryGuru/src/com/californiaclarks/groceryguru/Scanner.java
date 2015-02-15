@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -53,9 +54,13 @@ public class Scanner extends Fragment implements OnClickListener {
 	public static final int REQUEST_CAMERA = 100;
 
 	String value;
+	
+	public Scanner(Context c) {
+		userFunctions = new UserFunctions(c);
+	}
 
 	// member variables
-	UserFunctions userFunctions = new UserFunctions();
+	UserFunctions userFunctions;
 	Button bTakePic, bAddByHand;
 	ProgressDialog dialog;
 
@@ -130,12 +135,10 @@ public class Scanner extends Fragment implements OnClickListener {
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
-							userFunctions = new UserFunctions();
+							userFunctions = new UserFunctions(getActivity().getApplicationContext());
 							if (inputExp.getText().toString().equals("")) {
 								userFunctions.addToFrige(
-										value,
-										userFunctions.getUserData(getActivity()
-												.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
+										value);
 							} else {
 
 								int expDate = Integer.parseInt(inputExp
@@ -145,10 +148,7 @@ public class Scanner extends Fragment implements OnClickListener {
 								userFunctions
 										.addToFrigeExpire(
 												value,
-												expDate,
-												userFunctions
-														.getUserData(getActivity()
-																.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
+												expDate);
 							}// refresh local DBs
 							((GroceryGuru) getActivity()).refresh();
 						}

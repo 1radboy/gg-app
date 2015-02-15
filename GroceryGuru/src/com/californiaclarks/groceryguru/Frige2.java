@@ -17,16 +17,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.californiaclarks.groceryguru.library.DatabaseHandler;
-import com.californiaclarks.groceryguru.library.UserFunctions;
 
 public class Frige2 extends ListFragment {
 
 	private static final int MILIS_PER_DAY = 86400000;
 	private String clickedItem;
-
-	// constructor
-	public Frige2() {
-	}
 
 	// called when items are updates
 	public void setItems(String[][] items) {
@@ -45,7 +40,6 @@ public class Frige2 extends ListFragment {
 
 	// member variables
 	String[][] items;
-	UserFunctions userFunctions = new UserFunctions();
 	GGAdapter adapter = null;
 	Context context;
 
@@ -101,9 +95,8 @@ public class Frige2 extends ListFragment {
 		delete.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String email = userFunctions.getUserData(getActivity()
-						.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0];
-				userFunctions.delFromFrige(clickedItem, email);
+				((GroceryGuru) getActivity()).userFunctions
+						.delFromFrige(clickedItem);
 				// refresh local DBs
 				((GroceryGuru) getActivity()).refresh();
 				delete.setClickable(false);
