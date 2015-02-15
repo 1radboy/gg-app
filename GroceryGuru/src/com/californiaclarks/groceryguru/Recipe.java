@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,14 @@ public class Recipe extends Fragment {
 	// called when items are updates
 	public void setRecipe(JSONObject json) {
 		try {
-			name = json.getJSONObject("recipe").getString("name");
-			content = json.getJSONObject("recipe").getString("content");
+			if (json.getInt("success") == 1) {
+				name = json.getJSONObject("recipe").getString("name");
+				content = json.getJSONObject("recipe").getString("content");
+			}
+			else {
+				name = "";
+				content = json.getString("error_msg");
+			}
 			tvName.setText(name.toUpperCase(Locale.US));
 			tvContent.setText(content);
 		} catch (JSONException e) {
@@ -39,8 +46,6 @@ public class Recipe extends Fragment {
 		tvName = (TextView) vFrag.findViewById(R.id.tvName);
 		tvContent = (TextView) vFrag.findViewById(R.id.tvContent);
 		((GroceryGuru) getActivity()).refreshRecipe();
-		tvName.setText(name.toUpperCase(Locale.US));
-		tvContent.setText(content);
 
 		return vFrag;
 	}

@@ -19,7 +19,7 @@ public class SelectItems extends Activity implements OnClickListener {
 	Button bSubmit;
 	ListView list;
 	ArrayAdapter<String> adapter;
-	UserFunctions userFunctions = new UserFunctions(getApplicationContext());
+	UserFunctions userFunctions;
 
 	//create selectable view
 	@Override
@@ -39,6 +39,8 @@ public class SelectItems extends Activity implements OnClickListener {
 		list.setAdapter(adapter);
 
 		bSubmit.setOnClickListener(this);
+		
+		userFunctions = new UserFunctions(this);
 	}
 
 	//add checked items to frige

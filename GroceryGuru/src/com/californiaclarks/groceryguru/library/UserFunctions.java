@@ -24,6 +24,10 @@ public class UserFunctions {
 	public UserFunctions() {
 		jsonParser = new JSONParser();
 	}
+	
+	public void setContext(Context c) {
+		this.email = getUserData(c)[DatabaseHandler.LOC_EMAIL][0];
+	}
 
 	//login and return server response
 	public JSONObject loginUser(String email, String password) {

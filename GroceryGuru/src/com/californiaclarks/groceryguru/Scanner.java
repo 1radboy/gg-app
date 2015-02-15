@@ -55,8 +55,8 @@ public class Scanner extends Fragment implements OnClickListener {
 
 	String value;
 	
-	public Scanner(Context c) {
-		userFunctions = new UserFunctions(c);
+	public Scanner(UserFunctions uf) {
+		userFunctions = uf;
 	}
 
 	// member variables
@@ -135,7 +135,6 @@ public class Scanner extends Fragment implements OnClickListener {
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
-							userFunctions = new UserFunctions(getActivity().getApplicationContext());
 							if (inputExp.getText().toString().equals("")) {
 								userFunctions.addToFrige(
 										value);

@@ -34,12 +34,13 @@ public class GroceryGuru extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		userFunctions = new UserFunctions(this);
+		userFunctions = new UserFunctions();
 		f = new Frige2();
 		s = new ShopList();
 		r = new Recipe();
 
 		if (userFunctions.isLoggedIn(getApplicationContext())) {
+			userFunctions.setContext(this);
 			setContentView(R.layout.groceryguru);
 			// Create the adapter that will return a fragment .
 			paMain = new GGPagerAdapter(getSupportFragmentManager());
@@ -134,7 +135,7 @@ public class GroceryGuru extends FragmentActivity {
 		@Override
 		public Fragment getItem(int pos) {
 			if (pos == 0)
-				return new Scanner(getApplicationContext());
+				return new Scanner(userFunctions);
 			else if (pos == 1) {
 				f.setItems(userFunctions.getFrige(getApplicationContext()));
 				return f;
