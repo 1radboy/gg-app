@@ -27,7 +27,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.renderscript.Type;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,6 +164,20 @@ public class Scanner extends Fragment implements OnClickListener {
 			alert.setTitle("Add An Item Manually");
 			alert.setMessage("Enter the name of the item to add manually below.");
 			final EditText input = new EditText(getActivity());
+			input.setFilters(new InputFilter[] { new InputFilter() {
+
+				@Override
+				public CharSequence filter(CharSequence src, int start,
+						int end, Spanned dest, int dstart, int dend) {
+					if (src.equals("")) { // for backspace
+						return src;
+					}
+					if (src.toString().matches("[a-zA-Z ]+")) {
+						return src;
+					}
+					return "";
+				}
+			} });
 			alert.setView(input);
 			alert.setPositiveButton("Next",
 					new DialogInterface.OnClickListener() {

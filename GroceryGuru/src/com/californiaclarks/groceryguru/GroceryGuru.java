@@ -117,11 +117,13 @@ public class GroceryGuru extends FragmentActivity {
 				findViewById(R.id.appleFridge).setVisibility(View.GONE);
 				findViewById(R.id.emptyTextFridge).setVisibility(View.GONE);
 				findViewById(R.id.delete).setVisibility(View.VISIBLE);
+				findViewById(R.id.changeExp).setVisibility(View.VISIBLE);
 				findViewById(R.id.listLayoutFridge).setVisibility(View.VISIBLE);
 			} else {
 				findViewById(R.id.appleFridge).setVisibility(View.VISIBLE);
 				findViewById(R.id.emptyTextFridge).setVisibility(View.VISIBLE);
 				findViewById(R.id.delete).setVisibility(View.GONE);
+				findViewById(R.id.changeExp).setVisibility(View.GONE);
 				findViewById(R.id.listLayoutFridge).setVisibility(View.GONE);
 			}
 		} catch (Exception e) {

@@ -6,15 +6,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -52,6 +56,7 @@ public class Frige2 extends ListFragment {
 	Context context;
 
 	Button delete;
+	Button changeExp;
 
 	// Toast item age on click
 	@Override
@@ -78,6 +83,10 @@ public class Frige2 extends ListFragment {
 				+ " from fridge");
 		delete.setTextColor(Color.BLACK);
 		delete.setClickable(true);
+		changeExp.setText("Change expiration date of "
+				+ items[DatabaseHandler.LOC_ITEM][position]);
+		changeExp.setTextColor(Color.BLACK);
+		changeExp.setClickable(true);
 		currentItem = items[DatabaseHandler.LOC_ITEM][position];
 	}
 
@@ -115,6 +124,61 @@ public class Frige2 extends ListFragment {
 				delete.setClickable(false);
 				delete.setTextColor(Color.GRAY);
 				delete.setText("Remove");
+				changeExp.setClickable(false);
+				changeExp.setTextColor(Color.GRAY);
+				changeExp.setText("Change expiration date");
+			}
+		});
+		changeExp = (Button) vFrag.findViewById(R.id.changeExp);
+		changeExp.setClickable(false);
+		changeExp.setTextColor(Color.GRAY);
+		changeExp.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder alertExp = new AlertDialog.Builder(
+						getActivity());
+				alertExp.setTitle("Change Expiration Date");
+				alertExp.setMessage("Enter the number of days from now the item will expire.");
+				final EditText inputExp = new EditText(getActivity());
+				inputExp.setInputType(InputType.TYPE_CLASS_NUMBER);
+				inputExp.setHint("Leave blank for default");
+				alertExp.setView(inputExp);
+				alertExp.setPositiveButton("OK",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								userFunctions = new UserFunctions();
+								if (inputExp.getText().toString().equals("")) {
+									userFunctions
+											.addToFrige(
+													currentItem,
+													userFunctions
+															.getUserData(getActivity()
+																	.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
+								} else {
+
+									int expDate = Integer.parseInt(inputExp
+											.getText().toString());
+									// add item to online GroceryGuru account
+
+									userFunctions.addToFrigeExpire(
+											currentItem,
+											expDate,
+											userFunctions
+													.getUserData(getActivity()
+															.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
+								}// refresh local DBs
+								((GroceryGuru) getActivity()).refresh();
+							}
+						});
+				alertExp.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+							}
+						});
+				alertExp.show();
 			}
 		});
 		if (empty) {
@@ -122,6 +186,7 @@ public class Frige2 extends ListFragment {
 			vFrag.findViewById(R.id.emptyTextFridge)
 					.setVisibility(View.VISIBLE);
 			vFrag.findViewById(R.id.delete).setVisibility(View.GONE);
+			vFrag.findViewById(R.id.changeExp).setVisibility(View.GONE);
 			vFrag.findViewById(R.id.listLayoutFridge).setVisibility(View.GONE);
 		}
 		return vFrag;
