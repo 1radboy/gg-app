@@ -20,18 +20,18 @@ import com.californiaclarks.groceryguru.library.UserFunctions;
 
 public class ShopList extends ListFragment {
 
-	//constructor
+	// constructor
 	public ShopList() {
 	}
 
-	//called when items are updated
+	// called when items are updated
 	public void setItems(String[][] items) {
 		this.items = items;
-		//update adapter (UI) too
+		// update adapter (UI) too
 		if (adapter != null) {
 			adapter.clear();
 			for (int i = 0; i < items[DatabaseHandler.LOC_ITEM].length; i++) {
-				//add only if running low
+				// add only if running low
 				Date now = new Date(System.currentTimeMillis());
 				Date created_at = null;
 				try {
@@ -52,13 +52,13 @@ public class ShopList extends ListFragment {
 
 	}
 
-	//member variables
+	// member variables
 	String[][] items;
 	UserFunctions userFunctions;
 	GGAdapter adapter = null;
 	Context context;
 
-	//Toast item age on click
+	// Toast item age on click
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		String key = adapter.getItem(position);
@@ -91,16 +91,11 @@ public class ShopList extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-
-		//set layout to custom gglist layout
-		View vFrag = inflater.inflate(R.layout.gglist, container, false);
-
-		//use and set the custom adapter
-		adapter = new GGAdapter(inflater.getContext(),
-				new ArrayList<String>());
+		adapter = new GGAdapter(inflater.getContext(), new ArrayList<String>());
 		setListAdapter(adapter);
 
-		//only show items running low and refresh adapter
+		// only show items running low and refresh adapter
+		boolean empty = true;
 		for (int i = 0; i < items[DatabaseHandler.LOC_ITEM].length; i++) {
 			Date now = new Date(System.currentTimeMillis());
 			Date created_at = null;
@@ -113,10 +108,20 @@ public class ShopList extends ListFragment {
 			}
 			int age = (int) ((now.getTime() - created_at.getTime()) / 86400000);
 			if (Integer.parseInt(items[DatabaseHandler.LOC_AVGLEN][i]) - age < 3) {
+				empty = false;
 				adapter.add(items[DatabaseHandler.LOC_ITEM][i]);
 			}
 		}
 		adapter.notifyDataSetChanged();
+		// set layout to custom gglist layout
+		View vFrag;
+		if (empty) {
+			vFrag = inflater.inflate(R.layout.shoppingempty, container, false);
+		} else {
+			vFrag = inflater.inflate(R.layout.gglist, container, false);
+		}
+
+		// use and set the custom adapter
 
 		return vFrag;
 	}

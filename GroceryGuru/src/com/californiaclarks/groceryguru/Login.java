@@ -67,7 +67,11 @@ public class Login extends Activity {
 							DatabaseHandler db = new DatabaseHandler(
 									getApplicationContext());
 							JSONObject user = json.getJSONObject("user");
-							JSONObject frige = json.getJSONObject("items");
+							JSONObject frige = null;
+							try {
+								frige = json.getJSONObject("items");
+							} catch (Exception e) {
+							}
 
 							userFunction.logoutUser(getApplicationContext());
 							db.addUser(user.getString(KEY_NAME),
@@ -76,7 +80,12 @@ public class Login extends Activity {
 
 							// update frige
 							int j = 0;
-							while (j < frige.length()) {
+							int length = 0;
+							try {
+								length = frige.length();
+							} catch (Exception e) {
+							}
+							while (j < length) {
 								String item = frige.names().getString(j);
 								db.addItem(item, frige.getJSONArray(item)
 										.getString(0), frige.getJSONArray(item)

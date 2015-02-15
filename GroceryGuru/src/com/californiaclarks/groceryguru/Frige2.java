@@ -86,36 +86,41 @@ public class Frige2 extends ListFragment {
 		// super.onCreateView(inflater, container, savedInstanceState);
 
 		// set layout to custom list
-		View vFrag = inflater.inflate(R.layout.gglistfridge, container, false);
-
-		delete = (Button) vFrag.findViewById(R.id.delete);
-		delete.setClickable(false);
-		delete.setTextColor(Color.GRAY);
-		delete.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				String email = userFunctions.getUserData(getActivity()
-						.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0];
-				userFunctions.delFromFrige(currentItem, email);
-				// refresh local DBs
-				((GroceryGuru) getActivity()).refresh();
-				delete.setClickable(false);
-				delete.setTextColor(Color.GRAY);
-				delete.setText("Remove");
-			}
-		});
-
 		// use and set custom list adapter
 		adapter = new GGAdapter(inflater.getContext(), new ArrayList<String>());
 		setListAdapter(adapter);
 
 		// add items to adapter and refresh adapter
+		boolean empty = true;
 		for (String item : items[DatabaseHandler.LOC_ITEM]) {
 			adapter.add(item);
+			empty = false;
 		}
 		adapter.notifyDataSetChanged();
+		View vFrag;
+		if (empty) {
+			vFrag = inflater.inflate(R.layout.fridgeempty, container, false);
+		} else {
+			vFrag = inflater.inflate(R.layout.gglistfridge, container, false);
+			delete = (Button) vFrag.findViewById(R.id.delete);
+			delete.setClickable(false);
+			delete.setTextColor(Color.GRAY);
+			delete.setOnClickListener(new View.OnClickListener() {
 
+				@Override
+				public void onClick(View v) {
+					String email = userFunctions.getUserData(getActivity()
+							.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0];
+					userFunctions.delFromFrige(currentItem, email);
+					// refresh local DBs
+					((GroceryGuru) getActivity()).refresh();
+					delete.setClickable(false);
+					delete.setTextColor(Color.GRAY);
+					delete.setText("Remove");
+				}
+			});
+
+		}
 		return vFrag;
 	}
 
