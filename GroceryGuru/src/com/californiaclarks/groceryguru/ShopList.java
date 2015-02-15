@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.californiaclarks.groceryguru.library.DatabaseHandler;
+import com.californiaclarks.groceryguru.library.GGAdapter;
 import com.californiaclarks.groceryguru.library.UserFunctions;
 
 public class ShopList extends ListFragment {

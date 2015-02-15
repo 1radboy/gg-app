@@ -1,6 +1,11 @@
-package com.californiaclarks.groceryguru;
+package com.californiaclarks.groceryguru.library;
 
 import java.util.ArrayList;
+
+import com.californiaclarks.groceryguru.R;
+import com.californiaclarks.groceryguru.R.drawable;
+import com.californiaclarks.groceryguru.R.id;
+import com.californiaclarks.groceryguru.R.layout;
 
 import android.content.Context;
 import android.view.LayoutInflater;

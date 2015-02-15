@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.californiaclarks.groceryguru.library.DatabaseHandler;
+import com.californiaclarks.groceryguru.library.GGAdapter;
 
 public class Frige2 extends ListFragment {
 
@@ -43,7 +44,7 @@ public class Frige2 extends ListFragment {
 	GGAdapter adapter = null;
 	Context context;
 
-	Button delete, bRecipe;
+	Button delete;
 
 	// Toast item age on click
 	@Override
@@ -103,6 +104,7 @@ public class Frige2 extends ListFragment {
 				delete.setText("Remove");
 			}
 		});
+		delete.setClickable(false);
 
 		return vFrag;
 	}
