@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.InputType;
@@ -28,7 +27,7 @@ import com.californiaclarks.groceryguru.library.UserFunctions;
 public class Frige2 extends ListFragment {
 
 	private static final int MILIS_PER_DAY = 86400000;
-	private String currentItem;
+	private String clickedItem;
 
 	// constructor
 	public Frige2() {
@@ -55,8 +54,7 @@ public class Frige2 extends ListFragment {
 	GGAdapter adapter = null;
 	Context context;
 
-	Button delete;
-	Button changeExp;
+	Button delete, changeExp;
 
 	// Toast item age on click
 	@Override
@@ -79,15 +77,11 @@ public class Frige2 extends ListFragment {
 						+ String.valueOf(Integer
 								.parseInt(items[DatabaseHandler.LOC_AVGLEN][position])
 								- age) + " days", Toast.LENGTH_SHORT).show();
+
 		delete.setText("Remove " + items[DatabaseHandler.LOC_ITEM][position]
-				+ " from fridge");
-		delete.setTextColor(Color.BLACK);
+				+ " from Fridge");
 		delete.setClickable(true);
-		changeExp.setText("Change expiration date of "
-				+ items[DatabaseHandler.LOC_ITEM][position]);
-		changeExp.setTextColor(Color.BLACK);
-		changeExp.setClickable(true);
-		currentItem = items[DatabaseHandler.LOC_ITEM][position];
+		clickedItem = items[DatabaseHandler.LOC_ITEM][position];
 	}
 
 	@Override
@@ -101,32 +95,25 @@ public class Frige2 extends ListFragment {
 		setListAdapter(adapter);
 
 		// add items to adapter and refresh adapter
-		boolean empty = true;
 		for (String item : items[DatabaseHandler.LOC_ITEM]) {
 			adapter.add(item);
-			empty = false;
 		}
+		View vFrag = inflater.inflate(R.layout.gglistfridge, container, false);
 		adapter.notifyDataSetChanged();
-		final View vFrag = inflater.inflate(R.layout.gglistfridge, container,
-				false);
+
 		delete = (Button) vFrag.findViewById(R.id.delete);
 		delete.setClickable(false);
-		delete.setTextColor(Color.GRAY);
 		delete.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				String email = userFunctions.getUserData(getActivity()
 						.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0];
-				userFunctions.delFromFrige(currentItem, email);
+				userFunctions.delFromFrige(clickedItem, email);
 				// refresh local DBs
 				((GroceryGuru) getActivity()).refresh();
 				delete.setClickable(false);
 				delete.setTextColor(Color.GRAY);
 				delete.setText("Remove");
-				changeExp.setClickable(false);
-				changeExp.setTextColor(Color.GRAY);
-				changeExp.setText("Change expiration date");
 			}
 		});
 		changeExp = (Button) vFrag.findViewById(R.id.changeExp);
@@ -152,7 +139,7 @@ public class Frige2 extends ListFragment {
 								if (inputExp.getText().toString().equals("")) {
 									userFunctions
 											.addToFrige(
-													currentItem,
+													clickedItem,
 													userFunctions
 															.getUserData(getActivity()
 																	.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
@@ -163,7 +150,7 @@ public class Frige2 extends ListFragment {
 									// add item to online GroceryGuru account
 
 									userFunctions.addToFrigeExpire(
-											currentItem,
+											clickedItem,
 											expDate,
 											userFunctions
 													.getUserData(getActivity()
@@ -181,14 +168,7 @@ public class Frige2 extends ListFragment {
 				alertExp.show();
 			}
 		});
-		if (empty) {
-			vFrag.findViewById(R.id.appleFridge).setVisibility(View.VISIBLE);
-			vFrag.findViewById(R.id.emptyTextFridge)
-					.setVisibility(View.VISIBLE);
-			vFrag.findViewById(R.id.delete).setVisibility(View.GONE);
-			vFrag.findViewById(R.id.changeExp).setVisibility(View.GONE);
-			vFrag.findViewById(R.id.listLayoutFridge).setVisibility(View.GONE);
-		}
+
 		return vFrag;
 	}
 

@@ -14,7 +14,6 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.californiaclarks.groceryguru.library.DatabaseHandler;
 import com.californiaclarks.groceryguru.library.UserFunctions;
@@ -111,36 +110,7 @@ public class GroceryGuru extends FragmentActivity {
 		// refresh items in frige fragment and shoping list fragment
 		f.setItems(userFunctions.getFrige(getApplicationContext()));
 		s.setItems(userFunctions.getFrige(getApplicationContext()));
-		try {
-
-			if (notEmpty) {
-				findViewById(R.id.appleFridge).setVisibility(View.GONE);
-				findViewById(R.id.emptyTextFridge).setVisibility(View.GONE);
-				findViewById(R.id.delete).setVisibility(View.VISIBLE);
-				findViewById(R.id.changeExp).setVisibility(View.VISIBLE);
-				findViewById(R.id.listLayoutFridge).setVisibility(View.VISIBLE);
-			} else {
-				findViewById(R.id.appleFridge).setVisibility(View.VISIBLE);
-				findViewById(R.id.emptyTextFridge).setVisibility(View.VISIBLE);
-				findViewById(R.id.delete).setVisibility(View.GONE);
-				findViewById(R.id.changeExp).setVisibility(View.GONE);
-				findViewById(R.id.listLayoutFridge).setVisibility(View.GONE);
-			}
-		} catch (Exception e) {
-		}
-		try {
-
-			if (notEmpty) {
-				findViewById(R.id.appleShop).setVisibility(View.GONE);
-				findViewById(R.id.emptyTextShop).setVisibility(View.GONE);
-				findViewById(R.id.listLayoutShop).setVisibility(View.VISIBLE);
-			} else {
-				findViewById(R.id.appleShop).setVisibility(View.VISIBLE);
-				findViewById(R.id.emptyTextShop).setVisibility(View.VISIBLE);
-				findViewById(R.id.listLayoutShop).setVisibility(View.GONE);
-			}
-		} catch (Exception e) {
-		}
+		
 		return notEmpty;
 	}
 

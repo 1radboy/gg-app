@@ -5,7 +5,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/listLayoutFridge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="100"
@@ -16,6 +15,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#EEEEEE" />
+        
+        <TextView android:id="@android:id/empty"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:text="No Results Frige" />
     </LinearLayout>
 
     <Button
@@ -24,34 +28,11 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Change expiration date" />
-
     <Button
         android:id="@+id/delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Remove" />
-
-    <ImageView
-        android:id="@+id/appleFridge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="100"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:src="@drawable/apple"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/emptyTextFridge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:text="Your fridge is empty!"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:visibility="gone" />
 
 </LinearLayout>

@@ -22,10 +22,6 @@ public class ShopList extends ListFragment {
 
 	private static final int MILIS_PER_DAY = 86400000;
 
-	// constructor
-	public ShopList() {
-	}
-
 	// called when items are updated
 	public void setItems(String[][] items) {
 		this.items = items;
@@ -94,14 +90,14 @@ public class ShopList extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
+
 		adapter = new GGAdapter(inflater.getContext(), new ArrayList<String>());
 		setListAdapter(adapter);
 
 		// only show items running low and refresh adapter
-		boolean empty = true;
 		for (int i = 0; i < items[DatabaseHandler.LOC_ITEM].length; i++) {
 			Date now = new Date(System.currentTimeMillis());
-			Date created_at = null;
+			Date created_at = now;
 			try {
 				created_at = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
 						Locale.US)
@@ -111,22 +107,12 @@ public class ShopList extends ListFragment {
 			}
 			int age = (int) ((now.getTime() - created_at.getTime()) / MILIS_PER_DAY);
 			if (Integer.parseInt(items[DatabaseHandler.LOC_AVGLEN][i]) - age < 3) {
-				empty = false;
 				adapter.add(items[DatabaseHandler.LOC_ITEM][i]);
 			}
 		}
 		adapter.notifyDataSetChanged();
-		// set layout to custom gglist layout
-		View vFrag = inflater.inflate(R.layout.gglist, container, false);
-		if (empty) {
-			vFrag.findViewById(R.id.appleShop).setVisibility(View.VISIBLE);
-			vFrag.findViewById(R.id.emptyTextShop).setVisibility(View.VISIBLE);
-			vFrag.findViewById(R.id.listLayoutShop).setVisibility(View.GONE);
-		}
 
-		// use and set the custom adapter
-
-		return vFrag;
+		return inflater.inflate(R.layout.gglist, container, false);
 	}
 
 }
