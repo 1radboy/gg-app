@@ -93,6 +93,17 @@ public class UserFunctions {
 		return json;
 	}
 	
+	//manually add a single item to the frige online and return server response
+	public JSONObject addToFrigeExpire(String item, int userProvidedExpire, String email) {
+		List<NameValuePair> tags = new ArrayList<NameValuePair>();
+		tags.add(new BasicNameValuePair("tag", "addToFrige"));
+		tags.add(new BasicNameValuePair("item", item));
+		tags.add(new BasicNameValuePair("email", email));
+		tags.add(new BasicNameValuePair("expire", String.valueOf(userProvidedExpire)));
+		JSONObject json = jsonParser.getJSONFromUrl(url, tags);
+		return json;
+	}
+	
 	//delete a single item from the frige online and return server response
 	public JSONObject delFromFrige(String item, String email) {
 		List<NameValuePair> tags = new ArrayList<NameValuePair>();
