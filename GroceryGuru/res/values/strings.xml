@@ -12,5 +12,7 @@
     <string name="logout">Logout</string>
     <string name="refresh">Refresh Frige</string>
     <string name="tip1">Tip! Only scan the items on the left!</string>
+    <string name="title_activity_welcome">Grocery Guru</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

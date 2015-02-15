@@ -74,8 +74,7 @@ public class Register extends Activity {
 									user.getString(KEY_CREATED_AT));
 
 							// start main activity
-							Intent i = new Intent(getApplicationContext(),
-									GroceryGuru.class);
+							Intent i = new Intent(getApplicationContext(),Welcome.class);
 							i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(i);
 							finish();

@@ -80,9 +80,8 @@ public class Login extends Activity {
 								j++;
 							}
 
-							//start main activity
-							Intent i = new Intent(getApplicationContext(),
-									GroceryGuru.class);
+							// start main activity
+							Intent i = new Intent(getApplicationContext(),Welcome.class);
 							i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(i);
 							finish();
