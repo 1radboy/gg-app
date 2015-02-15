@@ -74,7 +74,8 @@ public class Register extends Activity {
 									user.getString(KEY_CREATED_AT));
 
 							// start main activity
-							Intent i = new Intent(getApplicationContext(),Welcome.class);
+							Intent i = new Intent(getApplicationContext(),
+									Welcome.class);
 							i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(i);
 							finish();
@@ -84,7 +85,7 @@ public class Register extends Activity {
 						}
 					} else {
 						// show the error
-						tvError.setText("ERROR. Are you connected to the internet?");
+						tvError.setText("ERROR. Make sure you are connected to the internet.");
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

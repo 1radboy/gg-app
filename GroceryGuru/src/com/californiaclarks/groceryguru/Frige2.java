@@ -7,11 +7,13 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,15 +22,18 @@ import com.californiaclarks.groceryguru.library.UserFunctions;
 
 public class Frige2 extends ListFragment {
 
-	//constructor
+	private static final int MILIS_PER_DAY = 86400000;
+	private String currentItem;
+
+	// constructor
 	public Frige2() {
 	}
 
-	//called when items are updates
+	// called when items are updates
 	public void setItems(String[][] items) {
 		this.items = items;
 
-		//also updates adapter
+		// also updates adapter
 		if (adapter != null) {
 			adapter.clear();
 			for (String item : items[DatabaseHandler.LOC_ITEM]) {
@@ -39,13 +44,15 @@ public class Frige2 extends ListFragment {
 
 	}
 
-	//member variables
+	// member variables
 	String[][] items;
-	UserFunctions userFunctions;
+	UserFunctions userFunctions = new UserFunctions();
 	GGAdapter adapter = null;
 	Context context;
 
-	//Toast item age on click
+	Button delete;
+
+	// Toast item age on click
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Date now = new Date(System.currentTimeMillis());
@@ -57,30 +64,53 @@ public class Frige2 extends ListFragment {
 			e.printStackTrace();
 		}
 
+		int age = (int) ((now.getTime() - created_at.getTime()) / MILIS_PER_DAY);
+
 		Toast.makeText(
 				getActivity(),
-				"You have had "
-						+ items[DatabaseHandler.LOC_ITEM][position]
-						+ " for "
-						+ String.valueOf((created_at.getTime() - now.getTime())
-								/ -86400000) + " days", Toast.LENGTH_SHORT)
-				.show();
+				items[DatabaseHandler.LOC_ITEM][position]
+						+ " expires in "
+						+ String.valueOf(Integer
+								.parseInt(items[DatabaseHandler.LOC_AVGLEN][position])
+								- age) + " days", Toast.LENGTH_SHORT).show();
+		delete.setText("Remove " + items[DatabaseHandler.LOC_ITEM][position]
+				+ " from fridge");
+		delete.setTextColor(Color.BLACK);
+		delete.setClickable(true);
+		currentItem = items[DatabaseHandler.LOC_ITEM][position];
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+		// super.onCreateView(inflater, container, savedInstanceState);
 
-		//set layout to custom list
-		View vFrag = inflater.inflate(R.layout.gglist, container, false);
+		// set layout to custom list
+		View vFrag = inflater.inflate(R.layout.gglistfridge, container, false);
 
-		//use and set custom list adapter
-		adapter = new GGAdapter(inflater.getContext(),
-				new ArrayList<String>());
+		delete = (Button) vFrag.findViewById(R.id.delete);
+		delete.setClickable(false);
+		delete.setTextColor(Color.GRAY);
+		delete.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String email = userFunctions.getUserData(getActivity()
+						.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0];
+				userFunctions.delFromFrige(currentItem, email);
+				// refresh local DBs
+				((GroceryGuru) getActivity()).refresh();
+				delete.setClickable(false);
+				delete.setTextColor(Color.GRAY);
+				delete.setText("Remove");
+			}
+		});
+
+		// use and set custom list adapter
+		adapter = new GGAdapter(inflater.getContext(), new ArrayList<String>());
 		setListAdapter(adapter);
 
-		//add items to adapter and refresh adapter
+		// add items to adapter and refresh adapter
 		for (String item : items[DatabaseHandler.LOC_ITEM]) {
 			adapter.add(item);
 		}

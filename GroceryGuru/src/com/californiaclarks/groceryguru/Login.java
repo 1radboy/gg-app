@@ -15,16 +15,15 @@ import com.californiaclarks.groceryguru.library.DatabaseHandler;
 import com.californiaclarks.groceryguru.library.UserFunctions;
 
 public class Login extends Activity {
-	
-	//member varibles
+
+	// member varibles
 	Button btnLogin, btnLoginToRegister;
 	EditText etEmail, etPassword;
 	TextView tvError;
 
-	
-	//keys
+	// keys
 	private static String KEY_SUCCESS = "success";
-	//private static String KEY_ERROR = "error";
+	// private static String KEY_ERROR = "error";
 	private static String KEY_ERROR_MSG = "error_msg";
 	private static String KEY_NAME = "name";
 	private static String KEY_EMAIL = "email";
@@ -46,17 +45,22 @@ public class Login extends Activity {
 		btnLogin.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View view) {
-				
-				//get login info
+
+				// get login info
 				String email = etEmail.getText().toString();
 				String password = etPassword.getText().toString();
 				UserFunctions userFunction = new UserFunctions();
 				JSONObject json = userFunction.loginUser(email, password);
 
-				//read server response
+				// read server response
 				try {
-					//login user
-					if (!json.isNull(KEY_SUCCESS)) {
+					// login user
+					String success = null;
+					try {
+						success = json.getString(KEY_SUCCESS);
+					} catch (Exception e) {
+					}
+					if (success != null) {
 						tvError.setText("");
 						String tag = json.getString(KEY_SUCCESS);
 						if (Integer.parseInt(tag) == 1) {
@@ -70,7 +74,7 @@ public class Login extends Activity {
 									user.getString(KEY_EMAIL),
 									user.getString(KEY_CREATED_AT));
 
-							//update frige
+							// update frige
 							int j = 0;
 							while (j < frige.length()) {
 								String item = frige.names().getString(j);
@@ -81,13 +85,16 @@ public class Login extends Activity {
 							}
 
 							// start main activity
-							Intent i = new Intent(getApplicationContext(),Welcome.class);
+							Intent i = new Intent(getApplicationContext(),
+									Welcome.class);
 							i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(i);
 							finish();
 						} else {
 							tvError.setText(json.getString(KEY_ERROR_MSG));
 						}
+					} else {
+						tvError.setText("ERROR. Make sure you are connected to the internet.");
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -95,7 +102,7 @@ public class Login extends Activity {
 			}
 		});
 
-		//link to register page
+		// link to register page
 		btnLoginToRegister.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View view) {

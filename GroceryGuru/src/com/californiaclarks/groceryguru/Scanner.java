@@ -25,7 +25,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.renderscript.Type;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,14 +43,16 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 
 public class Scanner extends Fragment implements OnClickListener {
 
-	//keys
+	// keys
 	public static final String BASE_DIR = Environment
 			.getExternalStorageDirectory().toString() + "/gg_ocr/";
 	public static final String lang = "eng";
 	public static final int REQUEST_SELECT = 200;
 	public static final int REQUEST_CAMERA = 100;
 
-	//member variables
+	String value;
+
+	// member variables
 	UserFunctions userFunctions = new UserFunctions();
 	Button bTakePic, bAddByHand;
 	ProgressDialog dialog;
@@ -58,14 +62,14 @@ public class Scanner extends Fragment implements OnClickListener {
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		//make tessdata folder on sdcard
+		// make tessdata folder on sdcard
 		File dir = new File(BASE_DIR + "tessdata/");
 		if (!dir.exists()) {
 			if (!dir.mkdirs()) {
 				Log.e("SCANNER", "Could not create directory on sdcard: ");
 			}
 		}
-		//copy tessdata to sdcard from assets
+		// copy tessdata to sdcard from assets
 		if (!(new File(BASE_DIR + "tessdata/" + lang + ".traineddata"))
 				.exists()) {
 			try {
@@ -100,7 +104,7 @@ public class Scanner extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.bTakePic:
-			//start camera activity
+			// start camera activity
 			File file = new File(BASE_DIR + "recipt.png");
 			Uri outputFileUri = Uri.fromFile(file);
 
@@ -110,25 +114,52 @@ public class Scanner extends Fragment implements OnClickListener {
 			startActivityForResult(intent, REQUEST_CAMERA);
 			break;
 		case R.id.bAddByHand:
-			//show popup for new item
+			// show popup for new item
+
+			final AlertDialog.Builder alertExp = new AlertDialog.Builder(
+					getActivity());
+			alertExp.setTitle("Add An Item Manually");
+			alertExp.setMessage("Enter the number of days from now the item will expire.");
+			final EditText inputExp = new EditText(getActivity());
+			inputExp.setInputType(InputType.TYPE_CLASS_NUMBER);
+			alertExp.setView(inputExp);
+			alertExp.setPositiveButton("Add",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							int expDate = Integer.parseInt(inputExp.getText()
+									.toString());
+							userFunctions = new UserFunctions();
+							// add item to online GroceryGuru account
+							userFunctions
+									.addToFrigeExpire(
+											value,
+											expDate,
+											userFunctions
+													.getUserData(getActivity()
+															.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
+							// refresh local DBs
+							((GroceryGuru) getActivity()).refresh();
+						}
+					});
+			alertExp.setNegativeButton("Cancel",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+						}
+					});
+
 			AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 			alert.setTitle("Add An Item Manually");
 			alert.setMessage("Enter the name of the item to add manually below.");
 			final EditText input = new EditText(getActivity());
 			alert.setView(input);
-			alert.setPositiveButton("Add",
+			alert.setPositiveButton("Next",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
-							String value = input.getText().toString();
-							userFunctions = new UserFunctions();
-							//add item to online GroceryGuru account
-							userFunctions.addToFrige(
-									value,
-									userFunctions.getUserData(getActivity()
-											.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
-							//refresh local DBs
-							((GroceryGuru) getActivity()).refresh();
+							value = input.getText().toString();
+							alertExp.show();
 						}
 					});
 			alert.setNegativeButton("Cancel",
@@ -144,17 +175,17 @@ public class Scanner extends Fragment implements OnClickListener {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//check that the user did not just exit
+		// check that the user did not just exit
 		if (resultCode != -1)
 			return;
 
 		switch (requestCode) {
 		case REQUEST_SELECT:
-			//refresh after selection of new items
+			// refresh after selection of new items
 			((GroceryGuru) getActivity()).refresh();
 			break;
 		case REQUEST_CAMERA:
-			//show scanning progress bar and start tesseract
+			// show scanning progress bar and start tesseract
 			dialog = ProgressDialog.show(getActivity(), "Please Wait...",
 					"We are scanning your recipt...", true);
 			new ScanRecipt().execute(BASE_DIR + "recipt.png");
@@ -163,16 +194,16 @@ public class Scanner extends Fragment implements OnClickListener {
 
 	}
 
-	//AsyncTask for tesseract
+	// AsyncTask for tesseract
 	private class ScanRecipt extends AsyncTask<String, Integer, String[]> {
 
 		protected void onProgressUpdate(Integer... progress) {
 		}
 
 		protected void onPostExecute(String[] result) {
-			//close loading popup
+			// close loading popup
 			dialog.dismiss();
-			//show selection screen if items present
+			// show selection screen if items present
 			if (!result[0].equals("none")) {
 				Intent i = new Intent(getActivity().getApplicationContext(),
 						SelectItems.class);
@@ -189,7 +220,7 @@ public class Scanner extends Fragment implements OnClickListener {
 
 		@Override
 		protected String[] doInBackground(String... arg0) {
-			//roatae image according to image metadata
+			// roatae image according to image metadata
 			Bitmap bitmap = BitmapFactory.decodeFile(BASE_DIR + "recipt.png");
 			try {
 				ExifInterface exif = new ExifInterface(BASE_DIR + "recipt.png");
@@ -221,7 +252,7 @@ public class Scanner extends Fragment implements OnClickListener {
 				Log.e("SCANNER", "Could not correct rotation: " + e.toString());
 			}
 
-			//start and run tesseract
+			// start and run tesseract
 			TessBaseAPI baseApi = new TessBaseAPI();
 			baseApi.setDebug(true);
 			baseApi.init(BASE_DIR, lang);
@@ -232,14 +263,14 @@ public class Scanner extends Fragment implements OnClickListener {
 
 			Log.v("SCANNER", "Raw text: " + text);
 
-			//prepare text for server scan
+			// prepare text for server scan
 			if (lang.equalsIgnoreCase("eng"))
 				text = text.replaceAll("[^a-zA-Z0-9]+", " ");
 			text = text.trim();
 			Locale l = Locale.getDefault();
 			text = text.toLowerCase(l);
 
-			//send text to server to parse
+			// send text to server to parse
 			JSONObject json = userFunctions.parseForItems(text);
 			JSONArray jBasket = null;
 			try {
@@ -248,7 +279,7 @@ public class Scanner extends Fragment implements OnClickListener {
 				e.printStackTrace();
 			}
 
-			//make String[] from JSONArray
+			// make String[] from JSONArray
 			String[] sBasket = new String[jBasket.length()];
 			for (int i = 0; i < jBasket.length(); i++) {
 				try {
