@@ -6,18 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -54,7 +49,7 @@ public class Frige2 extends ListFragment {
 	GGAdapter adapter = null;
 	Context context;
 
-	Button delete, changeExp;
+	Button delete, bRecipe;
 
 	// Toast item age on click
 	@Override
@@ -112,60 +107,7 @@ public class Frige2 extends ListFragment {
 				// refresh local DBs
 				((GroceryGuru) getActivity()).refresh();
 				delete.setClickable(false);
-				delete.setTextColor(Color.GRAY);
 				delete.setText("Remove");
-			}
-		});
-		changeExp = (Button) vFrag.findViewById(R.id.changeExp);
-		changeExp.setClickable(false);
-		changeExp.setTextColor(Color.GRAY);
-		changeExp.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				AlertDialog.Builder alertExp = new AlertDialog.Builder(
-						getActivity());
-				alertExp.setTitle("Change Expiration Date");
-				alertExp.setMessage("Enter the number of days from now the item will expire.");
-				final EditText inputExp = new EditText(getActivity());
-				inputExp.setInputType(InputType.TYPE_CLASS_NUMBER);
-				inputExp.setHint("Leave blank for default");
-				alertExp.setView(inputExp);
-				alertExp.setPositiveButton("OK",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								userFunctions = new UserFunctions();
-								if (inputExp.getText().toString().equals("")) {
-									userFunctions
-											.addToFrige(
-													clickedItem,
-													userFunctions
-															.getUserData(getActivity()
-																	.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
-								} else {
-
-									int expDate = Integer.parseInt(inputExp
-											.getText().toString());
-									// add item to online GroceryGuru account
-
-									userFunctions.addToFrigeExpire(
-											clickedItem,
-											expDate,
-											userFunctions
-													.getUserData(getActivity()
-															.getApplicationContext())[DatabaseHandler.LOC_EMAIL][0]);
-								}// refresh local DBs
-								((GroceryGuru) getActivity()).refresh();
-							}
-						});
-				alertExp.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-							}
-						});
-				alertExp.show();
 			}
 		});
 

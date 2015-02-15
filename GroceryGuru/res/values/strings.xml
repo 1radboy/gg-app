@@ -14,5 +14,6 @@
     <string name="tip1">Tip: Only scan the items on the left!</string>
     <string name="title_activity_welcome">Grocery Guru</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_recipie">Recipie</string>
 
 </resources>
