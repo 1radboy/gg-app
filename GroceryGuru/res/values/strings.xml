@@ -11,7 +11,7 @@
     <string name="bSubmit">Add To Frige</string>
     <string name="logout">Logout</string>
     <string name="refresh">Refresh Fridge</string>
-    <string name="tip1">Tip! Only scan the items on the left!</string>
+    <string name="tip1">Tip: Only scan the items on the left!</string>
     <string name="title_activity_welcome">Grocery Guru</string>
     <string name="hello_world">Hello world!</string>
 

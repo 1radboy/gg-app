@@ -20,6 +20,8 @@ import com.californiaclarks.groceryguru.library.UserFunctions;
 
 public class ShopList extends ListFragment {
 
+	private static final int MILIS_PER_DAY = 86400000;
+
 	// constructor
 	public ShopList() {
 	}
@@ -41,7 +43,7 @@ public class ShopList extends ListFragment {
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-				int age = (int) ((now.getTime() - created_at.getTime()) / 86400000);
+				int age = (int) ((now.getTime() - created_at.getTime()) / MILIS_PER_DAY);
 				if (Integer.parseInt(items[DatabaseHandler.LOC_AVGLEN][i])
 						- age < 3) {
 					adapter.add(items[DatabaseHandler.LOC_ITEM][i]);
@@ -77,14 +79,15 @@ public class ShopList extends ListFragment {
 			e.printStackTrace();
 		}
 
+		int age = (int) ((now.getTime() - created_at.getTime()) / MILIS_PER_DAY);
+
 		Toast.makeText(
 				getActivity(),
-				"You have had "
-						+ items[DatabaseHandler.LOC_ITEM][position]
-						+ " for "
-						+ String.valueOf((created_at.getTime() - now.getTime())
-								/ -86400000) + " days", Toast.LENGTH_SHORT)
-				.show();
+				items[DatabaseHandler.LOC_ITEM][position]
+						+ " expires in "
+						+ String.valueOf(Integer
+								.parseInt(items[DatabaseHandler.LOC_AVGLEN][position])
+								- age) + " days", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -106,7 +109,7 @@ public class ShopList extends ListFragment {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			int age = (int) ((now.getTime() - created_at.getTime()) / 86400000);
+			int age = (int) ((now.getTime() - created_at.getTime()) / MILIS_PER_DAY);
 			if (Integer.parseInt(items[DatabaseHandler.LOC_AVGLEN][i]) - age < 3) {
 				empty = false;
 				adapter.add(items[DatabaseHandler.LOC_ITEM][i]);
