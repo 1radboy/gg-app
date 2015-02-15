@@ -122,5 +122,14 @@ public class UserFunctions {
 		JSONObject json = jsonParser.getJSONFromUrl(url, tags);
 		return json;
 	}
+	
+	// request a recipie from the server
+	public JSONObject requestRecipe(String email) {
+		List<NameValuePair> tags = new ArrayList<NameValuePair>();
+		tags.add(new BasicNameValuePair("tag", "requestRecipe"));
+		tags.add(new BasicNameValuePair("email", email));
+		JSONObject json = jsonParser.getJSONFromUrl(url, tags);
+		return json;
+	}
 
 }
